@@ -4,8 +4,6 @@
 
 ![MIT](https://img.shields.io/badge/license-MIT-56ebc6) ![No dependencies](https://img.shields.io/badge/runtime_dependencies-0-56ebc6)
 
-
-
 ## Quick start
 
 Requires a browser and Python 3 (for local serving). **No `npm install` or build step.**
@@ -74,16 +72,6 @@ npm run check
 ```
 
 All graph, routing, packet lifecycle, recovery, and buffer behavior are covered by automated tests. GitHub Actions runs both commands on push and pull requests.
-
-## Deploy to GitHub Pages
-
-Create a **public** GitHub repository called `linkfall`, push these files to `main`, then open **Settings → Pages → Deploy from a branch → main → /(root)**.
-
-Expected published URL: `https://ghassen258.github.io/linkfall/` once Pages is enabled. All CSS/JS imports are relative, so the project works under a subpath.
-
-## Portfolio talking points
-
-Algorithms: Dijkstra, graph traversal, stable tie-breaking, adaptive edge costs, event-driven state machine, queueing and rate limiting, synthetic telemetry. Web engineering: Canvas 2D, requestAnimationFrame, ResizeObserver, pointer events and high-DPI scaling. Quality: zero runtime dependencies, deterministic tests, GitHub Actions.
 
 ## License
 
