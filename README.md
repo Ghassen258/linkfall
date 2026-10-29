@@ -4,7 +4,7 @@
 
 ![MIT](https://img.shields.io/badge/license-MIT-56ebc6) ![No dependencies](https://img.shields.io/badge/runtime_dependencies-0-56ebc6)
 
-![Linkfall network simulator interface](assets/preview.webp)
+
 
 ## Quick start
 
