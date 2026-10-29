@@ -1,0 +1,12 @@
+{
+  "name": "linkfall",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive browser-based network routing and failure simulation.",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node --check src/app.js && node --check src/engine.js && node --check src/render.js && node --check src/topology.js"
+  },
+  "engines": { "node": ">=20" }
+}
