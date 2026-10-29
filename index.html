@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#091321"><meta name="description" content="An interactive network failure and routing simulator, with live packets and Dijkstra shortest-path rerouting.">
+  <title>LINKFALL — Network chaos, made visible</title>
+  <link rel="stylesheet" href="styles.css"><script type="module" src="src/app.js"></script>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="identity" href="./" aria-label="Linkfall home"><span class="mark"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M7 24L16 12L22 21L30 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="24" r="3.5" fill="#09253a" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="12" r="3.5" fill="#09253a" stroke="currentColor" stroke-width="2"/><circle cx="22" cy="21" r="3.5" fill="#09253a" stroke="currentColor" stroke-width="2"/><circle cx="30" cy="9" r="3.5" fill="#09253a" stroke="currentColor" stroke-width="2"/></svg></span><span>LINK<span class="accent">FALL</span><small>NETWORK CHAOS LAB</small></span></a>
+    <div class="top-right"><span class="top-tag">NO BACKEND · NO DEPENDENCIES</span><span class="live-indicator"><span class="live-dot"></span><span id="engine-label">ENGINE ONLINE</span></span><button class="top-pause" type="button" id="pause" aria-pressed="false">Ⅱ Pause</button></div>
+  </header>
+  <main>
+    <section class="intro"><div><p class="kicker"><span class="kicker-line"></span> INTERACTIVE NETWORK ENGINEERING / EXPERIMENT 001</p><h1>BREAK THE LINK.<br><em>WATCH IT REROUTE.</em></h1><p class="subhead">Launch traffic. Sever a connection. Watch packets find a new route in real time. Every hop, bottleneck, and failure is simulated—not pre-animated.</p></div><div class="build-card"><span class="signal-symbol">⌁</span><div><strong>REAL ALGORITHMS.</strong><br><strong>VISIBLE CONSEQUENCES.</strong><p>Dijkstra + discrete-event simulation</p></div></div></section>
+    <section class="stats" aria-label="Live network metrics"><article class="stat"><span class="stat-label">PACKETS DELIVERED <i class="status-mini">↗</i></span><div class="stat-number" id="metric-delivered">0</div><small>Reached destination</small></article><article class="stat"><span class="stat-label">PACKETS DROPPED <i class="status-mini red">↘</i></span><div class="stat-number" id="metric-dropped">0</div><small>Failures / buffer pressure</small></article><article class="stat"><span class="stat-label">AVG TRANSIT <i class="status-mini">≈</i></span><div class="stat-number"><span id="metric-latency">—</span><span class="stat-unit">ms</span></div><small>Simulated elapsed time</small></article><article class="stat"><span class="stat-label">OPTIMAL PATH COST <i class="status-mini">◇</i></span><div class="stat-number" id="metric-cost">60</div><small>Weighted graph units</small></article></section>
+    <div class="main-grid">
+      <section class="visual-panel panel" aria-label="Network simulation">
+        <div class="panel-header"><div><p class="section-label">01 / TOPOLOGY VISUALIZER</p><h2>Network backbone <span class="count-label">8 NODES / 13 LINKS</span></h2></div><div class="toolbar"><button type="button" class="btn-warning" id="fail"><span>⚡</span> Inject failure</button><button type="button" class="btn-quiet" id="restore">↺ Repair links</button></div></div>
+        <div class="canvas-shell"><canvas id="network-canvas" aria-label="Animated eight-node network. Click an edge to inspect or drag nodes to rearrange." role="img"></canvas><div class="canvas-corner"><span class="pulse-dot"></span> LIVE DATA FLOW <span id="timecode">T+000.0s</span></div></div>
+        <div class="map-footer"><span><span class="legend-swatch flow"></span> ACTIVE ROUTE</span><span><span class="legend-swatch ordinary"></span> IDLE LINK</span><span><span class="legend-swatch failed"></span> FAILED LINK</span><span><span class="legend-swatch packet"></span> PACKET</span><span class="map-hint">LINK TO TOGGLE · NODE TO DRAG</span></div>
+      </section>
+      <aside class="controls panel" aria-label="Simulation controls">
+        <div class="panel-header compact"><div><p class="section-label">02 / SIMULATION CONTROL</p><h2>Mission control</h2></div><div class="control-radar" aria-hidden="true">✳</div></div>
+        <div class="control-section"><div class="control-caption"><label for="source">PACKET SOURCE</label><span class="section-index">A / B</span></div><div class="endpoint-row"><select id="source"></select><span class="endpoint-arrow">→</span><select id="target" aria-label="Packet destination"></select></div></div>
+        <div class="control-section"><div class="control-caption"><label for="rate">TRAFFIC INTENSITY</label><output for="rate" id="rate-value">5 pkt/s</output></div><input id="rate" type="range" min="1" max="45" step="1" value="5"><div class="slider-scale"><span>SPARSE</span><span>CONGESTED</span></div></div>
+        <div class="control-section"><div class="control-caption"><label for="speed">SIMULATION SPEED</label><output for="speed" id="speed-value">1.0×</output></div><input id="speed" type="range" min="0.5" max="3" step="0.5" value="1"><div class="slider-scale"><span>0.5×</span><span>3.0×</span></div></div>
+        <div class="route-info"><div class="route-title"><span class="section-label">CURRENT BEST ROUTE</span><span class="route-badge" id="route-status">CONNECTED</span></div><div id="route-nodes" class="route-list"></div><p class="route-explain">Shortest viable path, recomputed as links fail or become congested.</p></div>
+        <div class="inspector"><div class="inspect-top"><span class="section-label">LINK INSPECTOR</span><span id="link-health">13/13 HEALTHY</span></div><h3 id="inspect-title">Select a connection</h3><p id="inspect-description">Click any line in the network to view cost, throughput capacity, and status.</p><button type="button" id="toggle-link" class="inspect-toggle" disabled>Toggle selected link</button></div>
+        <button type="button" class="reset-button" id="reset">↺ Reset simulation metrics</button>
+      </aside>
+    </div>
+    <div class="bottom-grid">
+      <section class="panel chart-panel"><div class="lower-header"><div><p class="section-label">03 / TELEMETRY</p><h2>Traffic throughput</h2></div><div class="chart-legend"><span><i class="chart-good"></i> Delivered</span><span><i class="chart-bad"></i> Dropped</span></div></div><div class="chart-wrap"><canvas id="history-canvas" aria-label="Live chart showing delivered and dropped packets per simulated second"></canvas></div><div class="chart-footer"><span>LAST 42 SIMULATED SECONDS</span><span id="delivery-rate">100% DELIVERY EFFICIENCY</span></div></section>
+      <section class="panel event-panel"><div class="lower-header"><div><p class="section-label">04 / EVENT STREAM</p><h2>Fault & route log</h2></div><span class="log-live">● LIVE FEED</span></div><ol id="event-list" class="event-list" aria-label="Recent network events"></ol></section>
+    </div>
+    <section class="explanation"><div><p class="section-label">BEHIND THE PIXELS</p><h2>Not a video. A working simulator.</h2></div><div class="explain-grid"><div><span>01</span><strong>DIJKSTRA PATHFINDING</strong><p>Every packet chooses a minimum-cost active route. Failed connections disappear from the routing graph.</p></div><div><span>02</span><strong>LINK CAPACITY & QUEUEING</strong><p>Each link accepts a limited number of packets per simulated second. Heavy traffic creates queues and delays.</p></div><div><span>03</span><strong>FAULT INJECTION</strong><p>Cut a link mid-transmission and observe actual packet loss, surviving routes, and changing delivery metrics.</p></div></div></section>
+  </main>
+  <footer><span>LINKFALL / NETWORK CHAOS LAB</span><span>DETERMINISTIC ALGORITHMS · SYNTHETIC METRICS · BUILT IN VANILLA JS</span><span>SPACE: PAUSE · F: FAIL · H: HEAL</span></footer>
+</div>
+</body>
+</html>
